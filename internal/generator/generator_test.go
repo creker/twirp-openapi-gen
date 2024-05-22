@@ -127,6 +127,10 @@ func TestGenerator(t *testing.T) {
 					itemsRef:  "#/components/schemas/pet.v1.Vet",
 					itemsType: "object",
 				},
+				{
+					name:      "mappings",
+					fieldType: "object",
+				},
 			},
 		},
 	}

@@ -191,7 +191,7 @@ func (gen *generator) Message(msg *proto.Message) {
 			gen.addField(schemaProps, val.Field, false)
 		case *proto.MapField:
 			//logger.logd("proto.MapField")
-			gen.addField(schemaProps, val.Field, false)
+			gen.addMap(schemaProps, val)
 		case *proto.NormalField:
 			//logger.logd("proto.NormalField %q %q", val.Field.Type, val.Field.Name)
 			gen.addField(schemaProps, val.Field, val.Repeated)
@@ -207,6 +207,26 @@ func (gen *generator) Message(msg *proto.Message) {
 			Properties:  schemaProps,
 		},
 	}
+}
+
+func (gen *generator) addMap(schemaPropsV3 openapi3.Schemas, field *proto.MapField) {
+	fieldDescription := description(field.Comment)
+	fieldName := field.Name
+
+	addProps := openapi3.Schemas{}
+	gen.addField(addProps, field.Field, false)
+
+	fieldSchemaV3 := openapi3.SchemaRef{
+		Value: &openapi3.Schema{
+			Description: fieldDescription,
+			Type:        "object",
+			AdditionalProperties: openapi3.AdditionalProperties{
+				Schema: addProps[fieldName],
+			},
+		},
+	}
+
+	schemaPropsV3[fieldName] = &fieldSchemaV3
 }
 
 func (gen *generator) addField(schemaPropsV3 openapi3.Schemas, field *proto.Field, repeated bool) {
