@@ -520,7 +520,7 @@ func parseComment(comment *proto.Comment) (string, []map[string]interface{}, []m
 	}
 	reqExamples := []map[string]interface{}{}
 	respExamples := []map[string]interface{}{}
-	message := ""
+	var message []string
 	for _, line := range comment.Lines {
 		line = strings.TrimLeftFunc(line, unicode.IsSpace)
 		if strings.HasPrefix(line, "req-example:") {
@@ -538,8 +538,8 @@ func parseComment(comment *proto.Comment) (string, []map[string]interface{}, []m
 			}
 			respExamples = append(respExamples, example)
 		} else {
-			message = fmt.Sprintf("%s\n%s", message, line)
+			message = append(message, line)
 		}
 	}
-	return message, reqExamples, respExamples, nil
+	return strings.Join(message, "\n"), reqExamples, respExamples, nil
 }
