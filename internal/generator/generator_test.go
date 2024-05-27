@@ -105,7 +105,7 @@ func TestGenerator(t *testing.T) {
 				{
 					name:      "pet_id",
 					fieldType: "string",
-					desc:      "pet_id is an auto-generated id for the pet\\nthe id uniquely identifies a pet in the system",
+					desc:      "pet_id is an auto-generated id for the pet\nthe id uniquely identifies a pet in the system",
 				},
 				{
 					name:      "name",
@@ -130,6 +130,7 @@ func TestGenerator(t *testing.T) {
 				{
 					name:      "mappings",
 					fieldType: "object",
+					desc:      "inline comment",
 				},
 			},
 		},
@@ -250,11 +251,14 @@ func TestGenerator(t *testing.T) {
 					continue
 				}
 
-				if messageField.format != "" {
-					if messageField.format != "" && property.Format != messageField.format {
-						t.Errorf("%s: expected property format %q but got %q", schemaName, messageField.format, property.Format)
-						continue
-					}
+				if messageField.format != "" && property.Format != messageField.format {
+					t.Errorf("%s: expected property format %q but got %q", schemaName, messageField.format, property.Format)
+					continue
+				}
+
+				if messageField.desc != "" && messageField.desc != property.Description {
+					t.Errorf("%s: expected property description %q but got %q", schemaName, messageField.desc, property.Description)
+					continue
 				}
 
 				if propertyRef.Ref != messageField.ref {

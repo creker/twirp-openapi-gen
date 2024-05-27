@@ -2,14 +2,14 @@ syntax = "proto3";
 
 package pet.v1;
 
-option go_package = "github.com/blockthrough/twirp-openapi-gen/internal/generator/testdata/gen/go/pet/v1";
-
-import "payment/v1alpha1/payment.proto";
-import "google/type/datetime.proto";
-import "google/protobuf/empty.proto";
 import "google/protobuf/any.proto";
-import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
 import "google/protobuf/struct.proto";
+import "google/protobuf/wrappers.proto";
+import "google/type/datetime.proto";
+import "payment/v1alpha1/payment.proto";
+
+option go_package = "github.com/blockthrough/twirp-openapi-gen/internal/generator/testdata/gen/go/pet/v1";
 
 // PetType represents the different types of pets in the pet store.
 enum PetType {
@@ -107,11 +107,11 @@ message Pet {
 
   google.protobuf.Struct metadata = 103;
 
-  map<string, MapItem> mappings = 104;
+  map<string, MapItem> mappings = 104; // inline comment
 
-// TODO(dm): add support for oneof
-//  oneof test_oneof {
-//    string p1 = 7;
-//    int32 p2 = 8;
-//  }
+  // TODO(dm): add support for oneof
+  //  oneof test_oneof {
+  //    string p1 = 7;
+  //    int32 p2 = 8;
+  //  }
 }

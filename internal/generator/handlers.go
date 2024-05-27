@@ -113,7 +113,7 @@ func (gen *generator) RPC(rpc *proto.RPC) {
 	}
 
 	// NOTE: Redocly does not read the "examples" (plural) field, only the "example" (singular) one.
-	commentMsg, reqExamples, resExamples, err := parseComment(rpc.Comment)
+	commentMsg, reqExamples, resExamples, err := parseComment(rpc.Comment, rpc.InlineComment)
 	if err != nil {
 		// TODO(dm): how can we surface the errors from the parser instead of panicking?
 		log.Panicf("failed to parse comment %s ", err)
@@ -165,7 +165,7 @@ func (gen *generator) Enum(enum *proto.Enum) {
 
 	gen.openAPIV3.Components.Schemas[gen.packageName+"."+enum.Name] = &openapi3.SchemaRef{
 		Value: &openapi3.Schema{
-			Description: description(enum.Comment),
+			Description: description(enum.Comment, nil),
 			Type:        "string",
 			Enum:        values,
 		},
@@ -202,7 +202,7 @@ func (gen *generator) Message(msg *proto.Message) {
 
 	gen.openAPIV3.Components.Schemas[gen.packageName+"."+msg.Name] = &openapi3.SchemaRef{
 		Value: &openapi3.Schema{
-			Description: description(msg.Comment),
+			Description: description(msg.Comment, nil),
 			Type:        "object",
 			Properties:  schemaProps,
 		},
@@ -210,7 +210,7 @@ func (gen *generator) Message(msg *proto.Message) {
 }
 
 func (gen *generator) addMap(schemaPropsV3 openapi3.Schemas, field *proto.MapField) {
-	fieldDescription := description(field.Comment)
+	fieldDescription := description(field.Comment, field.InlineComment)
 	fieldName := field.Name
 
 	addProps := openapi3.Schemas{}
@@ -230,7 +230,7 @@ func (gen *generator) addMap(schemaPropsV3 openapi3.Schemas, field *proto.MapFie
 }
 
 func (gen *generator) addField(schemaPropsV3 openapi3.Schemas, field *proto.Field, repeated bool) {
-	fieldDescription := description(field.Comment)
+	fieldDescription := description(field.Comment, field.InlineComment)
 	fieldName := field.Name
 	fieldType := field.Type
 	fieldFormat := field.Type
@@ -518,12 +518,20 @@ func (gen *generator) addGoogleMoneySchema() {
 	}
 }
 
-func description(comment *proto.Comment) string {
-	if comment == nil {
+func description(comment, inlineComment *proto.Comment) string {
+	var lines []string
+	if comment != nil {
+		lines = append(lines, comment.Lines...)
+	}
+	if inlineComment != nil {
+		lines = append(lines, inlineComment.Lines...)
+	}
+	if len(lines) == 0 {
 		return ""
 	}
+
 	result := []string{}
-	for _, line := range comment.Lines {
+	for _, line := range lines {
 		line = strings.TrimSpace(line)
 		if len(line) > 0 {
 			result = append(result, line)
@@ -534,10 +542,19 @@ func description(comment *proto.Comment) string {
 
 // parseComment parses the comment for an RPC method and returns the description, request examples, and response examples.
 // it looks for the labels req-example: and res-example: to extract the JSON payload samples.
-func parseComment(comment *proto.Comment) (string, []map[string]interface{}, []map[string]interface{}, error) {
-	if comment == nil {
+func parseComment(comment, inlineComment *proto.Comment) (string, []map[string]interface{}, []map[string]interface{}, error) {
+	var lines []string
+	if comment != nil {
+		lines = append(lines, comment.Lines...)
+	}
+	if inlineComment != nil {
+		lines = append(lines, inlineComment.Lines...)
+	}
+
+	if len(lines) == 0 {
 		return "", nil, nil, nil
 	}
+
 	reqExamples := []map[string]interface{}{}
 	respExamples := []map[string]interface{}{}
 	var message []string
