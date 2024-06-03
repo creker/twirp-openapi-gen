@@ -46,14 +46,14 @@ func run(args []string) error {
 		flags.Usage()
 		return err
 	}
-	if flags.NArg() == 0 {
-		flags.Usage()
-		return errors.New("No input files specified")
-	}
-
 	if *printVersion {
 		fmt.Println(version)
 		return nil
+	}
+
+	if flags.NArg() == 0 {
+		flags.Usage()
+		return errors.New("No input files specified")
 	}
 
 	opts := []generator.Option{
