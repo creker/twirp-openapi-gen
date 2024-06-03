@@ -95,6 +95,16 @@ func NewGenerator(inputFiles []string, options ...Option) (*generator, error) {
 		return nil, fmt.Errorf("missing input files")
 	}
 
+	globbedInput := make([]string, 0, len(inputFiles))
+	for _, i := range inputFiles {
+		matches, err := filepath.Glob(i)
+		if err != nil {
+			return nil, fmt.Errorf("invalid input file '%s': %w", i, err)
+		}
+
+		globbedInput = append(globbedInput, matches...)
+	}
+
 	openAPIV3 := openapi3.T{
 		OpenAPI: "3.0.0",
 		Info: &openapi3.Info{
@@ -111,10 +121,10 @@ func NewGenerator(inputFiles []string, options ...Option) (*generator, error) {
 		openAPIV3.Servers = append(openAPIV3.Servers, &openapi3.Server{URL: server})
 	}
 
-	logger.logd("generating %q doc for %v", conf.format, inputFiles)
+	logger.logd("generating %q doc for %v", conf.format, globbedInput)
 
 	return &generator{
-		inputFiles:    inputFiles,
+		inputFiles:    globbedInput,
 		openAPIV3:     &openAPIV3,
 		conf:          &conf,
 		importedFiles: map[string]struct{}{},
