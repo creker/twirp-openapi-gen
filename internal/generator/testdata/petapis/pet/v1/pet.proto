@@ -9,7 +9,7 @@ import "google/protobuf/wrappers.proto";
 import "google/type/datetime.proto";
 import "payment/v1alpha1/payment.proto";
 
-option go_package = "github.com/blockthrough/twirp-openapi-gen/internal/generator/testdata/gen/go/pet/v1";
+option go_package = "github.com/creker/twirp-openapi-gen/internal/generator/testdata/gen/go/pet/v1";
 
 // PetType represents the different types of pets in the pet store.
 enum PetType {

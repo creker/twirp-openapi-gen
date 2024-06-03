@@ -1,19 +1,13 @@
 # twirp-openapi-gen
-Generate Open API V3 documentation for Twirp services
+Generate Open API V3 documentation for Twirp services. This is a fork of github.com/blockthrough/twirp-openapi-gen that fixes bugs and adds new features like maps.
 
-[![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=for-the-badge)](https://godoc.org/github.com/blockthrough/twirp-openapi-gen)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-5272B4.svg?style=for-the-badge)](https://godoc.org/github.com/creker/twirp-openapi-gen)
 
 
 ## Installation
 
-#### Binary
-
-For installation instructions from binaries please visit the [Releases Page](https://blockthrough/twirp-openapi-gen/releases).
-
-#### Go
-
 ```sh
-$  go install github.com/blockthrough/twirp-openapi-gen/cmd/twirp-openapi-gen@latest
+$  go install github.com/creker/twirp-openapi-gen/cmd/twirp-openapi-gen@latest
 ```
 
 ## Proto OpenAPI Mappings
@@ -107,14 +101,6 @@ Generate OpenAPI V3 JSON document for the Twirp PetStore service:
     -path-prefix "" \
     -doc-version 1.0 \
     -title "Pet API"
-```
-
-## Contributing
-
-#### Makefile
-
-```sh
-
 ```
 
 ## Why

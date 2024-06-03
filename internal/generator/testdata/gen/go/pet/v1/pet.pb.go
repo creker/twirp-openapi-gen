@@ -7,7 +7,7 @@
 package v1
 
 import (
-	v1alpha1 "github.com/blockthrough/twirp-openapi-gen/internal/generator/testdata/gen/go/payment/v1alpha1"
+	v1alpha1 "github.com/creker/twirp-openapi-gen/internal/generator/testdata/gen/go/payment/v1alpha1"
 	datetime "google.golang.org/genproto/googleapis/type/datetime"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"

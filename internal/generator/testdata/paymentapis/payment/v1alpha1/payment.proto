@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package payment.v1alpha1;
 
-option go_package = "github.com/blockthrough/twirp-openapi-gen/internal/generator/testdata/gen/go/payment/v1alpha1";
-
 import "google/type/money.proto";
+
+option go_package = "github.com/creker/twirp-openapi-gen/internal/generator/testdata/gen/go/payment/v1alpha1";
 
 // PaymentProvider represents the supported set
 // of payment providers.

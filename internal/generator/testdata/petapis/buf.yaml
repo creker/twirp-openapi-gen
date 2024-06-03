@@ -5,7 +5,7 @@ deps:
   - buf.build/acme/paymentapis
 lint:
   use:
-    - DEFAULT
+    - MINIMAL
 breaking:
   use:
     - FILE
