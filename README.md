@@ -66,11 +66,11 @@ The generator does a best effort attempt to map google.protobuf to OpenAPI types
 
 ```sh
 ❯ twirp-openapi-gen -h
-Usage of twirp-openapi-gen:
+Usage of twirp-openapi-gen [flags] <input files>:
+  -doc-version string
+        API Document version (default "0.1")
   -format string
         Document format; json or yaml (default "json")
-  -in value
-        Input source .proto files. May be specified multiple times.
   -out string
         Output document file (default "./openapi-doc.json")
   -path-prefix string
@@ -83,8 +83,8 @@ Usage of twirp-openapi-gen:
         Document title (default "open-api-v3-docs")
   -verbose
         Log debug output
-  -version string
-        Document version
+  -version
+        Print version
 ```
 
 ### Examples

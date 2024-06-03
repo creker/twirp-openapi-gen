@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -24,11 +25,13 @@ func main() {
 
 func run(args []string) error {
 	flags := flag.NewFlagSet(args[0], flag.ExitOnError)
+	flags.Usage = func() {
+		fmt.Fprintf(flags.Output(), "Usage of twirp-openapi-gen [flags] <input files>:\n")
+		flags.PrintDefaults()
+	}
 
-	in := arrayFlags{}
 	protoPaths := arrayFlags{}
 	servers := arrayFlags{}
-	flags.Var(&in, "in", "Input source .proto files. May be specified multiple times.")
 	flags.Var(&protoPaths, "proto-path", "Specify the directory in which to search for imports. May be specified multiple times; directories will be searched in order.  If not given, the current working directory is used.")
 	flags.Var(&servers, "servers", "Server object URL. May be specified multiple times.")
 	title := flags.String("title", "open-api-v3-docs", "Document title")
@@ -40,7 +43,12 @@ func run(args []string) error {
 	printVersion := flags.Bool("version", false, "Print version")
 
 	if err := flags.Parse(args[1:]); err != nil {
+		flags.Usage()
 		return err
+	}
+	if flags.NArg() == 0 {
+		flags.Usage()
+		return errors.New("No input files specified")
 	}
 
 	if *printVersion {
@@ -57,7 +65,7 @@ func run(args []string) error {
 		generator.Format(*format),
 		generator.Verbose(*verbose),
 	}
-	gen, err := generator.NewGenerator(in, opts...)
+	gen, err := generator.NewGenerator(flags.Args(), opts...)
 	if err != nil {
 		return err
 	}
