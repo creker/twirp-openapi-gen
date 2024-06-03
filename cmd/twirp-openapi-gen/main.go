@@ -5,16 +5,13 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime/debug"
 	"strings"
 
 	"github.com/creker/twirp-openapi-gen/internal/generator"
 )
 
 type arrayFlags []string
-
-var (
-	version = "DEV"
-)
 
 func main() {
 	if err := run(os.Args); err != nil {
@@ -47,7 +44,7 @@ func run(args []string) error {
 		return err
 	}
 	if *printVersion {
-		fmt.Println(version)
+		fmt.Println(version())
 		return nil
 	}
 
@@ -82,4 +79,13 @@ func (i *arrayFlags) String() string {
 func (i *arrayFlags) Set(value string) error {
 	*i = append(*i, value)
 	return nil
+}
+
+func version() string {
+	bi, ok := debug.ReadBuildInfo()
+	if ok && bi.Main.Version != "" {
+		return bi.Main.Version
+	}
+
+	return "DEV"
 }
