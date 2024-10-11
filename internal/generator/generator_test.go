@@ -267,9 +267,16 @@ func TestGenerator(t *testing.T) {
 					t.Errorf("%s: expected property description %q but got %q", schemaName, messageField.desc, property.Description)
 				}
 
-				if messageField.example != "" && property.Example.(string) != messageField.example {
-					t.Errorf("%s: expected property example %q but got %q", schemaName, messageField.example, property.Example)
-					continue
+				if messageField.example != "" {
+					if property.Example.(string) != messageField.example {
+						t.Errorf("%s: expected property example %q but got %q", schemaName, messageField.example, property.Example)
+						continue
+					}
+				} else {
+					if property.Example != nil {
+						t.Errorf("%s: expected property example nil but got %q", schemaName, property.Example)
+						continue
+					}
 				}
 
 				if propertyRef.Ref != messageField.ref {

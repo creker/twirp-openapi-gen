@@ -239,7 +239,9 @@ func (gen *generator) addField(schemaPropsV3 openapi3.Schemas, field *proto.Fiel
 	if p, ok := typeAliases[fieldType]; ok {
 		fieldType = p.Type
 		fieldFormat = p.Format
-		example = p.Example
+		if p.Example != "" {
+			example = p.Example
+		}
 	}
 
 	if fieldType == fieldFormat {
