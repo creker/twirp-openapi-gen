@@ -3,6 +3,7 @@ syntax = "proto3";
 package pet.v1;
 
 import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/wrappers.proto";
@@ -108,6 +109,8 @@ message Pet {
   google.protobuf.Struct metadata = 103;
 
   map<string, MapItem> mappings = 104; // inline comment
+
+  google.protobuf.Duration dur = 105;
 
   // TODO(dm): add support for oneof
   //  oneof test_oneof {

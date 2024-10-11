@@ -1,7 +1,7 @@
 package generator
 
 var typeAliases = map[string]struct {
-	Type, Format string
+	Type, Format, Example string
 }{
 	// proto numeric types
 	"int32":    {Type: "integer", Format: "int32"},
@@ -37,7 +37,9 @@ var typeAliases = map[string]struct {
 		Format: "date-time",
 	},
 	"google.protobuf.Duration": {
-		Type: "string",
+		Type:    "string",
+		Format:  "google.protobuf.Duration",
+		Example: "1.234s",
 	},
 	"google.protobuf.StringValue": {
 		Type: "string",

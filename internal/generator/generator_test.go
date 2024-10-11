@@ -27,6 +27,7 @@ type ProtoField struct {
 	ref       string
 	itemsRef  string
 	itemsType string
+	example   string
 }
 
 var (
@@ -131,6 +132,12 @@ func TestGenerator(t *testing.T) {
 					name:      "mappings",
 					fieldType: "object",
 					desc:      "inline comment",
+				},
+				{
+					name:      "dur",
+					fieldType: "string",
+					format:    "google.protobuf.Duration",
+					example:   "1.234s",
 				},
 			},
 		},
@@ -258,6 +265,10 @@ func TestGenerator(t *testing.T) {
 
 				if messageField.desc != "" && messageField.desc != property.Description {
 					t.Errorf("%s: expected property description %q but got %q", schemaName, messageField.desc, property.Description)
+				}
+
+				if messageField.example != "" && property.Example.(string) != messageField.example {
+					t.Errorf("%s: expected property example %q but got %q", schemaName, messageField.example, property.Example)
 					continue
 				}
 
