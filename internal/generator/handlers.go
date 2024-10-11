@@ -234,7 +234,7 @@ func (gen *generator) addField(schemaPropsV3 openapi3.Schemas, field *proto.Fiel
 	fieldName := field.Name
 	fieldType := field.Type
 	fieldFormat := field.Type
-	example := ""
+	var example any
 	// map proto types to openapi
 	if p, ok := typeAliases[fieldType]; ok {
 		fieldType = p.Type
