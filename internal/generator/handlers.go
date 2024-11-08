@@ -82,6 +82,10 @@ func (gen *generator) Import(i *proto.Import) {
 func (gen *generator) RPC(rpc *proto.RPC) {
 	logger.logd("RPC handler %q %q %q %q", gen.packageName, rpc.Name, rpc.RequestType, rpc.ReturnsType)
 
+	if _, ok := gen.conf.silencePkgs[gen.packageName]; ok {
+		return
+	}
+
 	parent, ok := rpc.Parent.(*proto.Service)
 	if !ok {
 		log.Panicf("parent is not proto.service")
@@ -157,6 +161,11 @@ func (gen *generator) RPC(rpc *proto.RPC) {
 
 func (gen *generator) Enum(enum *proto.Enum) {
 	logger.logd("Enum handler %q %q", gen.packageName, enum.Name)
+
+	if _, ok := gen.conf.silencePkgs[gen.packageName]; ok {
+		return
+	}
+
 	values := []interface{}{}
 	for _, element := range enum.Elements {
 		enumField, ok := element.(*proto.EnumField)
@@ -178,6 +187,10 @@ func (gen *generator) Enum(enum *proto.Enum) {
 
 func (gen *generator) Message(msg *proto.Message) {
 	logger.logd("Message handler %q %q", gen.packageName, msg.Name)
+
+	if _, ok := gen.conf.silencePkgs[gen.packageName]; ok {
+		return
+	}
 
 	schemaProps := openapi3.Schemas{}
 

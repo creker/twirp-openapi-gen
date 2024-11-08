@@ -29,6 +29,7 @@ func run(args []string) error {
 
 	protoPaths := arrayFlags{}
 	servers := arrayFlags{}
+	silencePkgs := arrayFlags{}
 	flags.Var(&protoPaths, "proto-path", "Specify the directory in which to search for imports. May be specified multiple times; directories will be searched in order.  If not given, the current working directory is used.")
 	flags.Var(&servers, "servers", "Server object URL. May be specified multiple times.")
 	title := flags.String("title", "open-api-v3-docs", "Document title")
@@ -38,6 +39,7 @@ func run(args []string) error {
 	pathPrefix := flags.String("path-prefix", "/twirp", "Twirp server path prefix")
 	verbose := flags.Bool("verbose", false, "Log debug output")
 	printVersion := flags.Bool("version", false, "Print version")
+	flags.Var(&silencePkgs, "silence-pkg", "Don't output protobuf package to OpenAPI spec")
 
 	if err := flags.Parse(args[1:]); err != nil {
 		flags.Usage()
@@ -61,6 +63,7 @@ func run(args []string) error {
 		generator.PathPrefix(*pathPrefix),
 		generator.Format(*format),
 		generator.Verbose(*verbose),
+		generator.SilencePkgs(silencePkgs),
 	}
 	gen, err := generator.NewGenerator(flags.Args(), opts...)
 	if err != nil {

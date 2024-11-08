@@ -14,12 +14,13 @@ import (
 var logger Lg
 
 type generatorConfig struct {
-	protoPaths []string
-	servers    []string
-	title      string
-	docVersion string
-	pathPrefix string
-	format     string
+	protoPaths  []string
+	servers     []string
+	title       string
+	docVersion  string
+	pathPrefix  string
+	format      string
+	silencePkgs map[string]struct{}
 }
 
 type Option func(config *generatorConfig) error
@@ -69,6 +70,16 @@ func Format(format string) Option {
 func Verbose(verbose bool) Option {
 	return func(config *generatorConfig) error {
 		logger.verbose = verbose
+		return nil
+	}
+}
+
+func SilencePkgs(pkgs []string) Option {
+	return func(config *generatorConfig) error {
+		config.silencePkgs = make(map[string]struct{}, len(pkgs))
+		for _, p := range pkgs {
+			config.silencePkgs[p] = struct{}{}
+		}
 		return nil
 	}
 }
