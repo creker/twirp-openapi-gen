@@ -159,7 +159,11 @@ func (gen *generator) Enum(enum *proto.Enum) {
 	logger.logd("Enum handler %q %q", gen.packageName, enum.Name)
 	values := []interface{}{}
 	for _, element := range enum.Elements {
-		enumField := element.(*proto.EnumField)
+		enumField, ok := element.(*proto.EnumField)
+		if !ok {
+			continue
+		}
+
 		values = append(values, enumField.Name)
 	}
 
